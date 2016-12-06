@@ -164,9 +164,9 @@ std::vector<std::pair<int, int> > ParentSelection(std::vector<std::pair<int, dou
     
     std::vector<std::pair<int, int> > pairs;
     pairs.resize(fitnessPairs.size());
-    std::uniform_real_distribution<double> distribution(0.0,1.0);
 
-    std::for_each(pairs.begin(), pairs.end(), [&probabilityVector, &distribution, &randomGenerator] (std::pair<int, int>& pair){
+    std::for_each(pairs.begin(), pairs.end(), [&probabilityVector, &randomGenerator] (std::pair<int, int>& pair){
+        std::uniform_real_distribution<double> distribution(0.0,1.0);
         double probability1 = distribution(randomGenerator);
         int index1 = GetIndex(0, probabilityVector, 0, probability1);
         
