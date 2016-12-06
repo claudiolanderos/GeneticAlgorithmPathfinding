@@ -80,16 +80,16 @@ double CalculateHaversineDistance(int loc1, int loc2, const std::vector<Location
 {
     Location location1 = locations[loc1];
     Location location2 = locations[loc2];
-    double dlon = (location2.mLongitude * 0.0174533) - (location1.mLongitude * 0.0174533);
-    double dlat = (location2.mLatitude * 0.0174533) - (location1.mLatitude * 0.0174533);
-    double a = std::pow((sin(dlat/2)),2) + cos(location1.mLatitude) * cos(location2.mLatitude) * std::pow((sin(dlon/2)),2);
-    double c = 2 * atan2(sqrt(a), sqrt(1-a));
-    return 3961 * c;
-}
-
-double SumLocationDistances(double fitness, Location loc)
-{
-    return fitness + loc.mLatitude;
+    double latitude1 = location1.mLatitude* 0.0174533;
+    double longitude1 = location1.mLongitude * 0.0174533;
+    double latitude2 = location2.mLatitude* 0.0174533;
+    double longitude2 = location2.mLongitude * 0.0174533;
+    
+    double dlon = (longitude2) - (longitude1);
+    double dlat = (latitude2) - (latitude1);
+    double a = std::pow((sin(dlat/2.0)),2) + cos(latitude1) * cos(latitude2) * std::pow((sin(dlon/2.0)),2);
+    double c = 2.0 * atan2(sqrt(a), sqrt(1.0-a));
+    return 3961.0 * c;
 }
 
 std::vector<std::pair<int, double> > CalculatePopulationFitness(Population population, std::vector<Location> locations)
@@ -98,20 +98,14 @@ std::vector<std::pair<int, double> > CalculatePopulationFitness(Population popul
 
     std::for_each(population.mMembers.begin(), population.mMembers.end(), [&](std::vector<int>& member){
         std::vector<double> stopsDistance;
-        stopsDistance.resize(locations.size()+1);
+        stopsDistance.resize(locations.size());
         std::pair<int, double> pair;
         double fitness = 0;
-        
-        /*std::vector<Location> orderedLocations;
-        std::for_each(member.begin(), member.end(), [&orderedLocations, &locations] (int n){
-            orderedLocations.push_back(locations[n]);
-        });*/
         
         std::adjacent_difference(member.begin(), member.end(), stopsDistance.begin(), [&locations] (int loc1, int loc2){
             return CalculateHaversineDistance(loc2, loc1, locations);
         });
         
-        //std::transform(orderedLocations.begin(), orderedLocations.end(), orderedLocations.begin()+1, stopsDistance.begin(), CalculateHaversineDistance);
         stopsDistance[0] = CalculateHaversineDistance(*(member.end()-1), *member.begin(), locations);
         
         fitness = std::accumulate(stopsDistance.begin(), stopsDistance.end(), 0.0f);
