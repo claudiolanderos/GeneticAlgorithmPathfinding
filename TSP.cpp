@@ -201,13 +201,13 @@ std::vector<int> CrossoverPairs(std::vector<int> parentA, std::vector<int> paren
     std::vector<int> child;
     if(crossoverIndex2 == 1)
     {
-        std::copy_n(parentA.begin(), crossoverIndex1, std::back_inserter(child));
+        std::copy_n(parentA.begin(), crossoverIndex1+1, std::back_inserter(child));
         std::copy_if(parentB.begin(), parentB.end(), std::back_inserter(child), [&child](int elem){
             return (std::find(child.begin(), child.end(), elem) == child.end());
         });
     }
     else {
-        std::copy_n(parentB.begin(), crossoverIndex1, std::back_inserter(child));
+        std::copy_n(parentB.begin(), crossoverIndex1+1, std::back_inserter(child));
         std::copy_if(parentA.begin(), parentA.end(), std::back_inserter(child), [&child](int elem){
             return (std::find(child.begin(), child.end(), elem) == child.end());
         });
@@ -222,14 +222,6 @@ std::vector<int> CrossoverPairs(std::vector<int> parentA, std::vector<int> paren
         std::swap(child[index1], child[index2]);
     }
     
-    /*std::ofstream outputfile;
-    outputfile.open("log.txt", std::fstream::app);
-    std::for_each(child.begin(), child.end()-1, [&outputfile](int& n){
-        outputfile << n;
-        outputfile << ",";
-    });
-    outputfile << *(child.end()-1);
-    outputfile << "\n"; */
     return child;
 }
 
