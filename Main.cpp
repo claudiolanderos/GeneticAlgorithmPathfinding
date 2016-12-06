@@ -33,19 +33,49 @@ int main(int argc, const char* argv[])
     Population population = GeneratePopulation(locations, popsize, random);
     std::vector<std::pair<int, double> > fitnessPairs = CalculatePopulationFitness(population, locations);
     std::vector<std::pair<int, int> > parents = ParentSelection(fitnessPairs, random);
-    Population newPopulation = GenerateNewPopulation(parents, population, static_cast<int>(locations.size()), mutationchance, random);
-    
-    std::ofstream outputfile;
-    outputfile.open("log.txt", std::fstream::app);
-    outputfile << "GENERARTION1:\n";
-    std::for_each(newPopulation.mMembers.begin(), newPopulation.mMembers.end(), [&outputfile](std::vector<int>& member){
-        std::for_each(member.begin(), member.end()-1, [&outputfile](int& n){
-            outputfile << n;
-            outputfile << ",";
-        });
-        outputfile << *(member.end()-1);
+
+    for (int i = 1; i <= generations; i++) {
+        population = GenerateNewPopulation(parents, population, static_cast<int>(locations.size()), mutationchance, random);
+        
+        std::ofstream outputfile;
+        outputfile.open("log.txt", std::fstream::app);
+        outputfile << "GENERARTION: ";
+        outputfile << i;
         outputfile << "\n";
+        std::for_each(population.mMembers.begin(), population.mMembers.end(), [&outputfile](std::vector<int>& member){
+            std::for_each(member.begin(), member.end()-1, [&outputfile](int& n){
+                outputfile << n;
+                outputfile << ",";
+            });
+            outputfile << *(member.end()-1);
+            outputfile << "\n";
+        });
+        outputfile.close();
+        fitnessPairs = CalculatePopulationFitness(population, locations);
+        if(i+1 <= generations)
+        {
+            parents = ParentSelection(fitnessPairs, random);
+        }
+    }
+    
+    std::sort(fitnessPairs.begin(), fitnessPairs.end(), [](std::pair<int, double>& first, std::pair<int, double>& second){
+        return first.second < second.second;
     });
     
+    std::ofstream outputfile;
+    outputfile << "SOLUTION: \n";
+    outputfile.open("log.txt", std::fstream::app);
+    std::for_each(population.mMembers[fitnessPairs[0].first].begin(), population.mMembers[fitnessPairs[0].first].end(), [&outputfile, &locations](int& n){
+        outputfile << locations[n].mName;
+        outputfile << "\n";
+    });
+    outputfile << locations[0].mName;
+    outputfile << "\n";
+    outputfile << "DISTANCE: ";
+    outputfile << fitnessPairs[0].second;
+    outputfile << " miles";
+    outputfile.close();
+    
+
 	return 0;
 }

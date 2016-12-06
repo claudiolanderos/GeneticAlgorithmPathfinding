@@ -147,13 +147,13 @@ std::vector<std::pair<int, int> > ParentSelection(std::vector<std::pair<int, dou
     std::vector<double> probabilityVector;
     probabilityVector.resize(fitnessPairs.size());
     std::generate(probabilityVector.begin(), probabilityVector.end(), [&probabilityVector]{
-        return 1.0/probabilityVector.size();
+        return 1.0/static_cast<double>(probabilityVector.size());
     });
     
     probabilityVector[fitnessPairs[0].first] *= 6.0;
     probabilityVector[fitnessPairs[1].first] *= 6.0;
 
-    std::for_each(fitnessPairs.begin()+2, fitnessPairs.begin()+(fitnessPairs.size()/2-1), [&probabilityVector](std::pair<int, double>& pair){
+    std::for_each(fitnessPairs.begin()+2, fitnessPairs.begin()+(fitnessPairs.size()/2), [&probabilityVector](std::pair<int, double>& pair){
         probabilityVector[pair.first] *= 3.0;
     });
     
@@ -222,6 +222,14 @@ std::vector<int> CrossoverPairs(std::vector<int> parentA, std::vector<int> paren
         std::swap(child[index1], child[index2]);
     }
     
+    /*std::ofstream outputfile;
+    outputfile.open("log.txt", std::fstream::app);
+    std::for_each(child.begin(), child.end()-1, [&outputfile](int& n){
+        outputfile << n;
+        outputfile << ",";
+    });
+    outputfile << *(child.end()-1);
+    outputfile << "\n"; */
     return child;
 }
 
