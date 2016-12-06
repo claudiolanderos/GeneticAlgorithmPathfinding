@@ -196,3 +196,49 @@ std::vector<std::pair<int, int> > ParentSelection(std::vector<std::pair<int, dou
     
     return pairs;
 }
+
+std::vector<int> CrossoverPairs(std::vector<int> parentA, std::vector<int> parentB, int size, int mutationChance, std::mt19937& randomGenerator)
+{
+    std::uniform_int_distribution<int> distribution1(1, size-2);
+    int crossoverIndex1 = distribution1(randomGenerator);
+    std::uniform_int_distribution<int> distribution2(0, 1);
+    int crossoverIndex2 = distribution2(randomGenerator);
+    
+    std::vector<int> child;
+    if(crossoverIndex2 == 1)
+    {
+        std::copy_n(parentA.begin(), crossoverIndex1, std::back_inserter(child));
+        std::copy_if(parentB.begin(), parentB.end(), std::back_inserter(child), [&child](int elem){
+            return (std::find(child.begin(), child.end(), elem) == child.end());
+        });
+    }
+    else {
+        std::copy_n(parentB.begin(), crossoverIndex1, std::back_inserter(child));
+        std::copy_if(parentA.begin(), parentA.end(), std::back_inserter(child), [&child](int elem){
+            return (std::find(child.begin(), child.end(), elem) == child.end());
+        });
+    }
+    
+    std::uniform_real_distribution<double> distribution3(0.0, 1.0);
+    double mutationValue = distribution3(randomGenerator);
+    if (mutationValue <= mutationChance) {
+        std::uniform_int_distribution<int> mutationDistribution(1, size-1);
+        int index1 = mutationDistribution(randomGenerator);
+        int index2 = mutationDistribution(randomGenerator);
+        std::swap(child[index1], child[index2]);
+    }
+    
+    return child;
+}
+
+Population GenerateNewPopulation(std::vector<std::pair<int, int> > parents, Population population, int size, int mutationChance, std::mt19937&randomGenerator)
+{
+    Population newPopulation;
+    population.mMembers.resize(population.mMembers.size());
+    std::for_each(parents.begin(), parents.end(), [&] (std::pair<int, int> pair){
+        newPopulation.mMembers.push_back(CrossoverPairs(population.mMembers[pair.first], population.mMembers[pair.second], size, mutationChance, randomGenerator));
+    });
+    
+    
+    return newPopulation;
+}

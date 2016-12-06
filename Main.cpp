@@ -32,8 +32,20 @@ int main(int argc, const char* argv[])
     std::vector<Location> locations = GetLocations(inputfile);
     Population population = GeneratePopulation(locations, popsize, random);
     std::vector<std::pair<int, double> > fitnessPairs = CalculatePopulationFitness(population, locations);
-    
     std::vector<std::pair<int, int> > parents = ParentSelection(fitnessPairs, random);
-
+    Population newPopulation = GenerateNewPopulation(parents, population, static_cast<int>(locations.size()), mutationchance, random);
+    
+    std::ofstream outputfile;
+    outputfile.open("log.txt", std::fstream::app);
+    outputfile << "GENERARTION1:\n";
+    std::for_each(newPopulation.mMembers.begin(), newPopulation.mMembers.end(), [&outputfile](std::vector<int>& member){
+        std::for_each(member.begin(), member.end()-1, [&outputfile](int& n){
+            outputfile << n;
+            outputfile << ",";
+        });
+        outputfile << *(member.end()-1);
+        outputfile << "\n";
+    });
+    
 	return 0;
 }
