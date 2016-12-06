@@ -31,6 +31,9 @@ int main(int argc, const char* argv[])
     
     std::vector<Location> locations = GetLocations(inputfile);
     Population population = GeneratePopulation(locations, popsize, random);
-    CalculatePopulationFitness(population, locations);
+    std::vector<std::pair<int, double> > fitnessPairs = CalculatePopulationFitness(population, locations);
+    
+    std::vector<std::pair<int, int> > parents = ParentSelection(fitnessPairs, random);
+
 	return 0;
 }
