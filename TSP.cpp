@@ -108,7 +108,7 @@ std::vector<std::pair<int, double> > CalculatePopulationFitness(Population popul
         
         stopsDistance[0] = CalculateHaversineDistance(*(member.end()-1), *member.begin(), locations);
         
-        fitness = std::accumulate(stopsDistance.begin(), stopsDistance.end(), 0.0f);
+        fitness = std::accumulate(stopsDistance.begin(), stopsDistance.end(), 0.0);
         pair = std::make_pair(pairs.size(), fitness);
         pairs.push_back(pair);
     });
@@ -157,7 +157,7 @@ std::vector<std::pair<int, int> > ParentSelection(std::vector<std::pair<int, dou
         probabilityVector[pair.first] *= 3.0;
     });
     
-    double sum = std::accumulate(probabilityVector.begin(), probabilityVector.end(), 0.0f);
+    double sum = std::accumulate(probabilityVector.begin(), probabilityVector.end(), 0.0);
     std::transform(probabilityVector.begin(), probabilityVector.end(), probabilityVector.begin(), [sum] (double& n){
         return n / sum;
     });

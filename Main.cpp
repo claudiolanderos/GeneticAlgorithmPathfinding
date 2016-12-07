@@ -65,8 +65,8 @@ int main(int argc, const char* argv[])
     });
     
     std::ofstream outputfile;
-    outputfile << "SOLUTION: \n";
     outputfile.open("log.txt", std::fstream::app);
+    outputfile << "SOLUTION:\n";
     std::for_each(population.mMembers[fitnessPairs[0].first].begin(), population.mMembers[fitnessPairs[0].first].end(), [&outputfile, &locations](int& n){
         outputfile << locations[n].mName;
         outputfile << "\n";
