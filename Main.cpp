@@ -9,7 +9,8 @@ int main(int argc, const char* argv[])
 {
     std::string path = argv[1];
     std::string inputfile, parsedInt;
-    int popsize, generations, mutationchance, seed;
+    int popsize, generations, seed;
+    double mutationchance;
     
     inputfile = argv[1];
     parsedInt = argv[2];
@@ -17,7 +18,8 @@ int main(int argc, const char* argv[])
     parsedInt = argv[3];
     generations = std::stoi(parsedInt);
     parsedInt = argv[4];
-    mutationchance = std::stoi(parsedInt);
+    mutationchance = std::stod(parsedInt);
+    mutationchance /= 100.0;
     parsedInt = argv[5];
     seed = std::stoi(parsedInt);
     
@@ -39,7 +41,7 @@ int main(int argc, const char* argv[])
         
         std::ofstream outputfile;
         outputfile.open("log.txt", std::fstream::app);
-        outputfile << "GENERARTION: ";
+        outputfile << "GENERATION: ";
         outputfile << i;
         outputfile << "\n";
         std::for_each(population.mMembers.begin(), population.mMembers.end(), [&outputfile](std::vector<int>& member){

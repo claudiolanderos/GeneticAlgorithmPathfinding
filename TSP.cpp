@@ -191,7 +191,7 @@ std::vector<std::pair<int, int> > ParentSelection(std::vector<std::pair<int, dou
     return pairs;
 }
 
-std::vector<int> CrossoverPairs(std::vector<int> parentA, std::vector<int> parentB, int size, int mutationChance, std::mt19937& randomGenerator)
+std::vector<int> CrossoverPairs(std::vector<int> parentA, std::vector<int> parentB, int size, double mutationChance, std::mt19937& randomGenerator)
 {
     std::uniform_int_distribution<int> distribution1(1, size-2);
     int crossoverIndex1 = distribution1(randomGenerator);
@@ -225,10 +225,10 @@ std::vector<int> CrossoverPairs(std::vector<int> parentA, std::vector<int> paren
     return child;
 }
 
-Population GenerateNewPopulation(std::vector<std::pair<int, int> > parents, Population population, int size, int mutationChance, std::mt19937&randomGenerator)
+Population GenerateNewPopulation(std::vector<std::pair<int, int> > parents, Population population, int size, double mutationChance, std::mt19937&randomGenerator)
 {
     Population newPopulation;
-    population.mMembers.resize(population.mMembers.size());
+    //population.mMembers.resize(population.mMembers.size());
     std::for_each(parents.begin(), parents.end(), [&] (std::pair<int, int> pair){
         newPopulation.mMembers.push_back(CrossoverPairs(population.mMembers[pair.first], population.mMembers[pair.second], size, mutationChance, randomGenerator));
     });

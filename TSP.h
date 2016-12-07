@@ -23,4 +23,4 @@ std::vector<std::pair<int, double> > CalculatePopulationFitness(Population popul
 
 std::vector<std::pair<int, int> > ParentSelection(std::vector<std::pair<int, double> > fitnessPairs, std::mt19937& randomGenerator);
 
-Population GenerateNewPopulation(std::vector<std::pair<int, int> > parents, Population population, int size, int mutationChance, std::mt19937&randomGenerator);
+Population GenerateNewPopulation(std::vector<std::pair<int, int> > parents, Population population, int size, double mutationChance, std::mt19937&randomGenerator);
